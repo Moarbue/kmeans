@@ -6,7 +6,7 @@ AR_FLAGS=-rcs
 
 OBJ=lib/point.o lib/kmeans.o
 
-.PHONY: all mklibdir demo run
+.PHONY: all mklibdir demo
 
 all: mklibdir lib/libkmeans.a
 
