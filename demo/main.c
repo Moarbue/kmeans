@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     Points samples   = points_from_image(argv[2], &x, &y, &comp);
     Points centroids = kmeans(samples, atoi(argv[1]), 10000);
 
-    unsigned char *img = (unsigned char *) malloc(samples.s * 4);
+    unsigned char *img = (unsigned char *) malloc(samples.s * comp);
     if (img == NULL) {
         fprintf(stderr, "ERROR: Failed to allocate memory for image %s\n", out_file);
         return 1;
@@ -40,15 +40,17 @@ int main(int argc, char **argv)
             Point c = centroids.e[j];
 
             if (s.c == j) {
-                img[i*4 + 0] = c.x;
-                img[i*4 + 1] = c.y;
-                img[i*4 + 2] = c.z;
-                img[i*4 + 3] = 255;
+                img[i*comp + 0] = c.x;
+                img[i*comp + 1] = c.y;
+                img[i*comp + 2] = c.z;
+                
+                if (comp == 4)
+                    img[i*comp + 3] = 255;
             }
         }
     }
 
-    if (!stbi_write_png(out_file, x, y, comp, img, 0)) {
+    if (!stbi_write_png(out_file, x, y, comp, img, x*comp)) {
         fprintf(stderr, "ERROR: Failed to write image %s\n", out_file);
         return 1;
     }
